@@ -3,3 +3,4 @@
 
 ## 프로젝트 목록
 - [1주차 : 파이썬 기초 - 학과 정보 관리 프로그램](./week1-python-basics-project)
+- [2주차 : 파이썬 제어구조와 함수 - 학생 성적 관리 프로그램](./week2-control-structures-functions)
