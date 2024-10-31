@@ -37,5 +37,6 @@
 
 ## 실행 결과
 아래는 프로그램 실행 결과입니다:
+
 ![프로그램 실행 결과](./program_result1.png)
 ![프로그램 실행 결과](./program_result2.png)
