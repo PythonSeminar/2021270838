@@ -21,12 +21,13 @@
 - analyze_scores(self) : 평균 점수, 최고 점수, 최저 점수 계산
 - save_to_file(self, filename) : 학생 정보 CSV 파일로 저장
 - load_from_file(self, filename) : CSV 파일에서 학생 정보 불러오기
-- main() : main 함
+- main() : main 함수 불러오기
 
 ## 사용된 파이썬 기능
 - 복합 자료형 (딕셔너리)
 - 제어문 (if, elif, else문)
 - 함수 정의 및 호출
+- 클래스 정의
 - 예외 처리 (try ~ catch문)
 
 
