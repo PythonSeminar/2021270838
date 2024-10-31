@@ -8,6 +8,9 @@ class Student :
         self.grade = grade
         self.scores = {}
 
+    def __str__(self):
+        return f"이름: {self.name}, 학번: {self.student_id}, 학년: {self.grade}, 점수: {self.scores}"
+
 class StudentManagementSystem :
     def __init__(self) :
         # 초기화 로직
@@ -34,8 +37,8 @@ class StudentManagementSystem :
                     student.name = value
                 elif key == "grade" :
                     student.grade = value
-                elif key == "scores" and isinstance(value, dict) :
-                    student.scores.update(value)
+                else :
+                    print("점수 데이터가 잘못된 형식입니다.")
             print(f"{student.name} 학생의 정보가 업데이트 되었습니다.")
         else :
             print("해당 학번의 학생을 찾을 수 없습니다.")
@@ -51,7 +54,7 @@ class StudentManagementSystem :
     
     def display_all_students(self) :
         # 전체 학생 목록 출력 로직
-        if not self.student :
+        if not self.students :
             print("등록된 학생이 없습니다.")
         else :
             for student in self.students :
@@ -59,7 +62,7 @@ class StudentManagementSystem :
     
     def analyze_scores(self) :
         # 성적 분석 로직
-        all_scores = [score for student in self.student for score in student.scores.values()]
+        all_scores = [score for student in self.students for score in student.scores.values()]
         if all_scores:
             average = sum(all_scores) / len(all_scores)
             highest = max(all_scores)
@@ -71,9 +74,14 @@ class StudentManagementSystem :
     def save_to_file(self, filename) :
         # CSV 파일 저장 로직
         try:
+            # filename으로 지정된 파일을 쓰기 모드로 열기
             with open(filename, mode='w', newline='') as file:
+                # file 객체를 사용해 csv 작성 도구인 writer 객체를 생성
                 writer = csv.writer(file)
+                # 데이터가 어떤 필드를 나타내는지 헤더 작성
                 writer.writerow(["name", "student_id", "grade", "scores"])
+                # 각 학생 객체의 데이터를 한 줄씩 쓰기
+                # 딕셔너리 형태의 student.scores를 CSV 파일에 텍스트로 기록
                 for student in self.students:
                     writer.writerow([student.name, student.student_id, student.grade, student.scores])
             print(f"{filename} 파일에 저장되었습니다.")
@@ -83,14 +91,23 @@ class StudentManagementSystem :
     def load_from_file(self, filename) :
         # CSV 파일 로드 로직
         try:
+            # filename 파일 읽기 모드로 열기
             with open(filename, mode='r') as file:
+                # 각 행의 데이터가 딕셔너리로 반환
+                # DictReader - 각 줄을 딕셔너리 형태로 반환
                 reader = csv.DictReader(file)
+                # 파일의 각 행 순회
                 for row in reader:
-                    scores = eval(row["scores"])  # 저장된 딕셔너리 형태를 복원
+                    # scores 데이터는 텍스트로 저장되어 eval()을 사용해 딕셔너리로 복원
+                    # 저장된 딕셔너리 형태를 복원
+                    scores = eval(row["scores"]) 
                     student = Student(row["name"], row["student_id"], row["grade"])
+                    # 복원한 scores를 학생 객체에 할당
                     student.scores = scores
+                    # 새 학생 객체를 시스템에 추가
                     self.add_student(student)
             print(f"{filename} 파일에서 데이터를 불러왔습니다.")
+        # 파일을 찾을 수 없을 때의 예외 처리
         except FileNotFoundError:
             print(f"{filename} 파일을 찾을 수 없습니다.")
         except Exception as e:
@@ -134,11 +151,6 @@ def main() :
             grade = input("새 학년을 입력하세요 : ")
             if grade:
                 updates["grade"] = grade
-            nscores = input("새 점수를 입력하세요 : ")
-            if nscores:
-                scores = dict(item.split("=") for item in nscores.split(", "))
-                updates["scores"] = {k: int(v) for k, v in scores.items()}
-            system.update_student(student_id, updates)
         elif number == '4':
             student_id = input("삭제할 학생의 학번: ")
             system.delete_student(student_id)
